@@ -26,6 +26,7 @@ jobs:
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git fetch origin main
         git pull origin main --rebase || true
         if [ -f "hnw_b2b_contacts.csv" ]; then
           git add hnw_b2b_contacts.csv
