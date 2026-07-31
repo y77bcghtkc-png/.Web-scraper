@@ -1,5 +1,16 @@
 name: HNW B2B Contact Scraper
 on:
+name: HNW B2B Contact Scraper
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 8 * * 1'
+permissions:
+  contents: write
+jobs:
+  run-scraper:
+    runs-on: ubuntu-latest
+...
   workflow_dispatch:
   schedule:
     - cron: '0 8 * * 1'
