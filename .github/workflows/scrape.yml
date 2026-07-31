@@ -20,8 +20,3 @@ jobs:
         pip install -r requirements.txt
     - name: Run the scraper script
       run: python scraper.py
-    - name: Upload CSV Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: hnw_b2b_contacts
-        path: hnw_b2b_contacts.csv
