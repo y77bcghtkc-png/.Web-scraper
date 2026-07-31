@@ -1,3 +1,4 @@
-requests
+duckduckgo_search
 beautifulsoup4
 pandas
+requests
