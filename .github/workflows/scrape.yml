@@ -23,12 +23,12 @@ jobs:
       - name: Run the scraper script
         run: python scraper.py
       - name: Commit and push results back to repo
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          if [ -f "hnw_b2b_contacts.csv" ]; then
-            git add hnw_b2b_contacts.csv
-            git diff --quiet && git diff --staged --quiet || (git commit -m "Update scraped HNW contact data [skip ci]" && git push)
-          else
-            echo "No CSV file generated to commit."
-          fi
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        if [ -f "hnw_b2b_contacts.csv" ]; then
+          git add hnw_b2b_contacts.csv
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update scraped HNW contact data [skip ci]" && git pull --rebase origin main && git push origin main)
+        else
+          echo "No CSV file generated to commit."
+        fi
