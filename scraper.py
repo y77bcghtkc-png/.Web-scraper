@@ -1,6 +1,5 @@
 import time
 import random
-import pandas as pd
 from duckduckgo_search import DDGS
 class LiveHNWScraper:
     def __init__(self):
@@ -16,7 +15,7 @@ class LiveHNWScraper:
         
         with DDGS() as ddgs:
             for query in self.queries:
-                print(f"[*] Querying: {query}")
+                print(f"\n[*] Querying: {query}")
                 try:
                     results = list(ddgs.text(query, max_results=3))
                     for r in results:
@@ -34,7 +33,6 @@ class LiveHNWScraper:
                         collected_data.append({
                             "Name/Title": title,
                             "Contact/Email": email_found,
-                            "Snippet Details": body,
                             "Profile Link": href
                         })
                 except Exception as e:
@@ -43,23 +41,17 @@ class LiveHNWScraper:
                 time.sleep(random.uniform(2.0, 4.0))
                 
         return collected_data
-    def run_scraper(self, output_filename="hnw_b2b_contacts.csv"):
+    def run_scraper(self):
         data = self.search_live_web()
         
-        if data:
-            df = pd.DataFrame(data)
-            df.drop_duplicates(subset=["Profile Link"], inplace=True)
-            df.to_csv(output_filename, index=False, encoding='utf-8')
-            print(f"[+] Success! Extracted {len(df)} live records and saved to {output_filename}")
-        else:
-            fallback_df = pd.DataFrame([{
-                "Name/Title": "Private Wealth Director",
-                "Contact/Email": "contact@wealth-advisory-example.com",
-                "Snippet Details": "Sample record fetched during strict network filtering.",
-                "Profile Link": "https://example.com"
-            }])
-            fallback_df.to_csv(output_filename, index=False, encoding='utf-8')
-            print("[-] Live search returned empty, wrote baseline sample record.")
+        print("\n" + "="*50)
+        print(f"EXTRACTED HNW CONTACT RESULTS ({len(data)} found):")
+        print("="*50)
+        for i, item in enumerate(data, 1):
+            print(f"{i}. Title: {item['Name/Title']}")
+            print(f"   Email: {item['Contact/Email']}")
+            print(f"   Link:  {item['Profile Link']}")
+            print("-" * 50)
 if __name__ == "__main__":
     scraper = LiveHNWScraper()
     scraper.run_scraper()
