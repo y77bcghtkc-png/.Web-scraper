@@ -22,15 +22,10 @@ jobs:
         pip install -r requirements.txt
     - name: Run the scraper script
       run: python scraper.py
-    - name: Commit and push results back to repo
-      run: |
-        git config --global user.name 'github-actions[bot]'
-        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        git fetch origin main
-        git pull origin main --rebase || true
-        if [ -f "hnw_b2b_contacts.csv" ]; then
-          git add hnw_b2b_contacts.csv
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Update scraped HNW contact data [skip ci]" && git push origin main)
-        else
-          echo "No CSV file generated to commit."
-        fi
+    - name: Commit and push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: main
+        file_pattern: hnw_b2b_contacts.csv
+        commit_message: "Update scraped HNW contact data [skip ci]"
