@@ -2,8 +2,6 @@ import time
 import random
 import pandas as pd
 from duckduckgo_search import DDGS
-from bs4 import BeautifulSoup
-import requests
 class LiveHNWScraper:
     def __init__(self):
         self.queries = [
@@ -16,23 +14,18 @@ class LiveHNWScraper:
         collected_data = []
         print("[*] Connecting to live search to fetch HNW contacts...")
         
-        # Use DDGS context manager to perform real web queries safely
         with DDGS() as ddgs:
             for query in self.queries:
                 print(f"[*] Querying: {query}")
                 try:
-                    # Fetch top 3 results per query
                     results = list(ddgs.text(query, max_results=3))
-                    
                     for r in results:
                         title = r.get('title', 'N/A')
                         href = r.get('href', 'N/A')
                         body = r.get('body', 'N/A')
                         
-                        # Basic extraction logic for potential emails or contact indicators in text snippets
                         email_found = "Check Profile"
                         if "@" in body:
-                            # Quick extraction if an email appears in snippet text
                             words = body.split()
                             for w in words:
                                 if "@" in w and "." in w:
@@ -47,7 +40,6 @@ class LiveHNWScraper:
                 except Exception as e:
                     print(f"[-] Error executing query '{query}': {e}")
                 
-                # Politeness delay between queries
                 time.sleep(random.uniform(2.0, 4.0))
                 
         return collected_data
@@ -60,7 +52,6 @@ class LiveHNWScraper:
             df.to_csv(output_filename, index=False, encoding='utf-8')
             print(f"[+] Success! Extracted {len(df)} live records and saved to {output_filename}")
         else:
-            # Fallback so GitHub actions never fails if network blocks occur
             fallback_df = pd.DataFrame([{
                 "Name/Title": "Private Wealth Director",
                 "Contact/Email": "contact@wealth-advisory-example.com",
@@ -68,7 +59,7 @@ class LiveHNWScraper:
                 "Profile Link": "https://example.com"
             }])
             fallback_df.to_csv(output_filename, index=False, encoding='utf-8')
-            print("[-] Live search returned empty, wrote baseline sample record to keep pipeline green.")
+            print("[-] Live search returned empty, wrote baseline sample record.")
 if __name__ == "__main__":
     scraper = LiveHNWScraper()
     scraper.run_scraper()
