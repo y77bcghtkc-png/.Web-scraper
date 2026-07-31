@@ -1,7 +1,5 @@
 name: HNW B2B Contact Scraper
 on:
-name: HNW B2B Contact Scraper
-on:
   workflow_dispatch:
   schedule:
     - cron: '0 8 * * 1'
